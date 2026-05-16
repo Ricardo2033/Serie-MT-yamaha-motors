@@ -48,7 +48,7 @@ function App() {
       titulo: "Rendimiento Hiper-Naked a Escala",
       motor: "Monocilíndrico de 155 cc",
       peso: "141 kg",
-      valvulas: "4 Válvulas",
+      valvulas: "4",
       potencia: "18.4 hp a 10,000 rpm",
       torque: "14.1 Nm a 7,500 rpm",
       tecnologias: [
@@ -67,7 +67,7 @@ function App() {
       titulo: "Diseñada para Escapar de la Rutina",
       motor: "Bicilíndrico en línea, 249 cc, 4 tiempos",
       peso: "167 kg",
-      valvulas: "8 Válvulas",
+      valvulas: "8",
       potencia: "35.5 hp a 12,000 rpm",
       torque: "22.6 Nm a 10,000 rpm",
       tecnologias: [
@@ -87,7 +87,7 @@ function App() {
       titulo: "El Equilibrio Perfecto entre Agilidad y Potencia",
       motor: "Bicilíndrico en línea de 321 cc,",
       peso: "168kg",
-      valvulas: "8 Válvulas",
+      valvulas: "8",
       potencia: "42.0 hp a 10,750 rpm",
       torque: "29.5 Nm de torque a 9,000 rpm",
       tecnologias: [
@@ -107,7 +107,7 @@ function App() {
       titulo: "La Máquina de Sonrisas Definitiva",
       motor: "Bicilíndrico en línea CP2 de 689 cc",
       peso: "183 kg",
-      valvulas: "DOHC de 8 válvulas y refrigeración líquida",
+      valvulas: "8",
       potencia: "73.8 hp a 9,000 rpm",
       torque: "67 Nm de torque a 6,500 rpm",
       tecnologias: [
@@ -126,7 +126,7 @@ function App() {
       titulo: "El Poder Descomunal del Motor Tricilíndrico",
       motor: "Tricilíndrico en línea CP3 de 890 cc",
       peso: "193 kg",
-      valvulas: "DOHC de 12 válvulas y refrigeración líquida",
+      valvulas: "12 ",
       potencia: "119 hp a 10,000 rpm",
       torque: "93 Nm de torque a 7,000 rpm",
       tecnologias: [
@@ -147,7 +147,7 @@ function App() {
       titulo: "El Rey de las Master of Torque",
       motor: "Tetracilíndrico en línea CP4 de 998 cc",
       peso: "214 kg",
-      valvulas: " DOHC 16 válvulas Y refrigeracion liquida ",
+      valvulas: "16 ",
       potencia: "165.9 hp a 11,500 rpm",
       torque: "112 Nm de torque a 9,000 rpm",
       tecnologias: [
@@ -254,9 +254,9 @@ function App() {
                 {/* Contenedor de Textos */}
                 <div className="absolute inset-0 z-20 flex flex-col justify-center px-6 md:px-20 lg:px-32">
                   {/* Título Principal */}
-                  <h1 className="text-5xl md:text-8xl font-[Rajdhani] font-black text-white italic uppercase leading-[0.9] tracking-tighter mb-4 drop-shadow-[0_4px_12px_rgba(0,0,0,0.5)]">
+                  <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-[Rajdhani] font-black text-white italic uppercase leading-[0.95] tracking-tighter mb-4 drop-shadow-[0_4px_12px_rgba(0,0,0,0.5)] wrap-break-words">
                     {selecMoto.nombre} <br />
-                    <span className="text-zinc-500/40 text-4xl md:text-6xl block mt-2">
+                    <span className="text-zinc-500/40 text-xl sm:text-3xl md:text-5xl lg:text-6xl block mt-2 leading-tight"> 
                       {selecMoto.titulo}
                     </span>
                   </h1>
@@ -307,7 +307,7 @@ function App() {
                       <span className="text-white text-xs uppercase block mb-5">
                         Cilindrada
                       </span>
-                      <span className="text-white text-2xl font-bold font-[Rajdhani] italic">
+                      <span className="text-zinc-400 text-[10px] md:text-xs uppercase block mb-2 md:mb-4 tracking-widest">
                         {selecMoto.motor}
                       </span>
                     </div>
@@ -320,7 +320,7 @@ function App() {
                       </span>
                     </div>
                     <div className="bg-zinc-900/30 p-6 border-l-2 border-blue-600 backdrop-blur-sm">
-                      <span className="text-white text-xs uppercase block mb-5">
+                      <span className="text-zinc-400 text-[10px] md:text-xs uppercase block mb-2 md:mb-4 tracking-widest">
                         Valvulas
                       </span>
                       <span className="text-white text-2xl font-bold font-[Rajdhani] italic">
@@ -336,7 +336,7 @@ function App() {
                       </span>
                     </div>
                     <div className="bg-zinc-900/30 p-6 border-l-2 border-blue-600 backdrop-blur-sm">
-                      <span className="text-white text-xs uppercase block mb-5">
+                      <span className="text-zinc-400 text-[10px] md:text-xs uppercase block mb-2 md:mb-4 tracking-widest">
                         Torque
                       </span>
                       <span className="text-white text-2xl font-bold font-[Rajdhani] italic">
