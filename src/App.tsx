@@ -1,10 +1,10 @@
 import { motion, AnimatePresence } from "framer-motion";
 import Header from "./Components/Hero";
 import hero from "../src/assets/Motos/mt 03/hero.jpg";
-import Footer from "./Components/Footer";
-import Cards from "./Components/Cards";
-import Modal from "./Components/Modal";
-import { useState } from "react";
+const Cards = lazy(() => import("./Components/Cards"));
+const Modal = lazy(() => import("./Components/Modal"));
+const Footer = lazy(() => import("./Components/Footer"));
+import { useState, lazy, Suspense } from "react";
 import mt15 from "./assets/Motos/mt 15/mt-15.webp";
 import mt15Hover from "./assets/Motos/mt 15/mt-15-hover.webp";
 import mt15HeroModal from "./assets/Motos/mt 15/wp11684329.webp";
@@ -174,193 +174,208 @@ function App() {
             : "brightness(0.6)",
         }}
       />
-
-      <main className="relative z-10 grow ">
-        <AnimatePresence mode="wait">
-          {!tarjetaVisible ? (
-            <motion.div
-              key="header"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.5 }}
-            >
-              <Header
-                onStart={handleVisibilidadDeTarjetas}
-                Titulo="Ingeniería que Emociona"
-              />
-            </motion.div>
-          ) : (
-            <motion.div
-              key="cards"
-              initial={{ opacity: 0, x: 100 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -100 }}
-              transition={{ duration: 0.6, ease: "easeOut" }}
-              whileHover={{
-                scale: 1.01,
-                boxShadow: "0px 0px 20px rgba(37, 99, 235, 0.4)",
-              }}
-              className="flex flex-col items-center py-10 px-4"
-            >
-              <button
-                onClick={handleVolver}
-                className="px-6 py-2 border-2 border-blue-600 text-blue-600 font-bold uppercase italic skew-x-[-15deg] hover:bg-blue-600 hover:text-white transition-all mt-5 mb-10"
+      <Suspense
+        fallback={
+          <div className="text-white text-center py-20 font-[Rajdhani]">
+            Cargando contenido...
+          </div>
+        }
+      >
+        <main className="relative z-10 grow ">
+          <AnimatePresence mode="wait">
+            {!tarjetaVisible ? (
+              <motion.div
+                key="header"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.5 }}
               >
-                <span className="inline-block skew-x-15deg">← Volver</span>
-              </button>
+                <Header
+                  onStart={handleVisibilidadDeTarjetas}
+                  Titulo="Ingeniería que Emociona"
+                />
+              </motion.div>
+            ) : (
+              <motion.div
+                key="cards"
+                initial={{ opacity: 0, x: 100 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -100 }}
+                transition={{ duration: 0.6, ease: "easeOut" }}
+                whileHover={{
+                  scale: 1.01,
+                  boxShadow: "0px 0px 20px rgba(37, 99, 235, 0.4)",
+                }}
+                className="flex flex-col items-center py-10 px-4"
+              >
+                <button
+                  onClick={handleVolver}
+                  className="px-6 py-2 border-2 border-blue-600 text-blue-600 font-bold uppercase italic skew-x-[-15deg] hover:bg-blue-600 hover:text-white transition-all mt-5 mb-10"
+                >
+                  <span className="inline-block skew-x-15deg">← Volver</span>
+                </button>
 
-              <div className="flex gap-6 flex-row flex-wrap justify-center items-stretch max-w-7xl mx-auto">
-                {SerieMt.map((motos) => (
-                  <div
-                    onClick={() => setSelecMoto(motos)}
-                    className="cursor-pointer"
-                    key={motos.id}
-                  >
-                    <Cards
-                      Subtitulo={motos.nombre}
-                      Imagen={motos.img}
-                      ImagenHover={motos.imgHover}
+                <div className="flex gap-6 flex-row flex-wrap justify-center items-stretch max-w-7xl mx-auto">
+                  {SerieMt.map((motos) => (
+                    <div
+                      onClick={() => setSelecMoto(motos)}
+                      className="cursor-pointer"
+                      key={motos.id}
+                    >
+                      <Cards
+                        Subtitulo={motos.nombre}
+                        Imagen={motos.img}
+                        ImagenHover={motos.imgHover}
+                      />
+                    </div>
+                  ))}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </main>
+
+        <Footer textoDeLegalidad="Este sitio es un proyecto educativo." />
+
+        <Modal isOpen={selecMoto !== null} onClose={() => setSelecMoto(null)}>
+          {selecMoto && (
+            <div className="flex flex-col w-full bg-black">
+              {/* --- SECCIÓN HERO MODAL --- */}
+              <section className="relative w-full h-screen md:h-screen overflow-hidden shrink-0">
+                <img
+                  src={selecMoto.imgHeroModal}
+                  alt={selecMoto.nombre}
+                  className="absolute inset-0 w-full h-full object-cover object-center brightness-[0.95] contrast-[1.10] rounded-2xl"
+                />
+
+                <div className="absolute inset-0 bg-gradient-to from-black/90 via-black/60 to-transparent z-10" />
+
+                {/* Contenedor de Textos */}
+                <div className="absolute inset-0 z-20 flex flex-col justify-center px-6 md:px-20 lg:px-32">
+                  {/* Título Principal */}
+                  <h1 className="text-5xl md:text-8xl font-[Rajdhani] font-black text-white italic uppercase leading-[0.9] tracking-tighter mb-4 drop-shadow-[0_4px_12px_rgba(0,0,0,0.5)]">
+                    {selecMoto.nombre} <br />
+                    <span className="text-zinc-500/40 text-4xl md:text-6xl block mt-2">
+                      {selecMoto.titulo}
+                    </span>
+                  </h1>
+
+                  <div className="flex items-center gap-3 mb-10">
+                    <div className="w-12 h-5 bg-blue-600 shadow-[0_0_8px_rgba(37,99,235,0.6)]"></div>
+                    <p className="text-zinc-300 font-medium tracking-[0.2em] text-sm md:text-lg uppercase italic">
+                      Revs Your Heart
+                    </p>
+                  </div>
+                  <div className="flex"></div>
+                </div>
+
+                <div className="absolute bottom-10 right-10 z-20 hidden md:block">
+                  <p className="font-[Rajdhani] text-zinc-600 text-xs tracking-[0.5em] uppercase vertical-text opacity-60">
+                    Yamaha Motor Japan // 2026
+                  </p>
+                </div>
+              </section>
+
+              {/* --- SECCIÓN DE CONTENIDO --- */}
+              <section className="w-full py-20 px-6 md:px-20 bg-black border-t border-zinc-900/80">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 max-w-7xl mx-auto">
+                  {/* Lado izquierdo: Descripción */}
+                  <div className="space-y-6">
+                    <h2 className="text-blue-500 font-[Rajdhani] text-2xl font-bold uppercase italic tracking-wider">
+                      El ADN Dark Side of Japan
+                    </h2>
+                    <p className="text-zinc-400 text-lg leading-relaxed font-light">
+                      {selecMoto.descripcion ||
+                        "Diseñada para dominar las calles con un torque agresivo y una agilidad sin precedentes."}
+                    </p>
+                    <img
+                      src={selecMoto.img1}
+                      alt=""
+                      className="w-full h-auto transform transition-transform duration-300 ease-out hover:scale-105"
+                    />
+                    <img
+                      src={selecMoto.img}
+                      alt=""
+                      className="w-full h-auto transform transition-transform duration-300 ease-out hover:scale-105"
                     />
                   </div>
-                ))}
-              </div>
-            </motion.div>
+
+                  {/* Lado derecho: Ficha rápida */}
+                  <div className="grid grid-cols-2 gap-4 h-5">
+                    <div className="bg-zinc-900/30 p-6 border-l-2 border-blue-600 backdrop-blur-sm">
+                      <span className="text-white text-xs uppercase block mb-5">
+                        Cilindrada
+                      </span>
+                      <span className="text-white text-2xl font-bold font-[Rajdhani] italic">
+                        {selecMoto.motor}
+                      </span>
+                    </div>
+                    <div className="bg-zinc-900/30 p-6 border-l-2 border-blue-600 backdrop-blur-sm">
+                      <span className="text-white text-xs uppercase block mb-5">
+                        Peso
+                      </span>
+                      <span className="text-white text-2xl font-bold font-[Rajdhani] italic">
+                        {selecMoto.peso || "189"} KG
+                      </span>
+                    </div>
+                    <div className="bg-zinc-900/30 p-6 border-l-2 border-blue-600 backdrop-blur-sm">
+                      <span className="text-white text-xs uppercase block mb-5">
+                        Valvulas
+                      </span>
+                      <span className="text-white text-2xl font-bold font-[Rajdhani] italic">
+                        {selecMoto.valvulas}
+                      </span>
+                    </div>
+                    <div className="bg-zinc-900/30 p-6 border-l-2 border-blue-600 backdrop-blur-sm">
+                      <span className="text-white text-xs uppercase block mb-5">
+                        Potencia
+                      </span>
+                      <span className="text-white text-2xl font-bold font-[Rajdhani] italic">
+                        {selecMoto.potencia}
+                      </span>
+                    </div>
+                    <div className="bg-zinc-900/30 p-6 border-l-2 border-blue-600 backdrop-blur-sm">
+                      <span className="text-white text-xs uppercase block mb-5">
+                        Torque
+                      </span>
+                      <span className="text-white text-2xl font-bold font-[Rajdhani] italic">
+                        {selecMoto.torque}
+                      </span>
+                    </div>
+                    <div className="bg-zinc-900/30 p-6 border-l-2 border-blue-600 backdrop-blur-sm">
+                      <span className="text-white text-xs uppercase block mb-5">
+                        Tecnologias
+                      </span>
+                      <span className="text-white text-2xl font-bold font-[Rajdhani] italic">
+                        <div className="flex flex-col gap-2.5">
+                          {selecMoto.tecnologias &&
+                          typeof selecMoto.tecnologias === "object" ? (
+                            Object.values(selecMoto.tecnologias).map(
+                              (tecnologia, index) => (
+                                <span
+                                  key={index}
+                                  className="text-white text-xs md:text-sm font-bold font-[Rajdhani] italic leading-tight block border-l border-blue-500 pl-2 tracking-wide"
+                                >
+                                  {String(tecnologia)}
+                                </span>
+                              ),
+                            )
+                          ) : (
+                            <span className="text-zinc-600 text-xs font-bold font-[Rajdhani] italic tracking-widest">
+                              SISTEMA ESTÁNDAR MT
+                            </span>
+                          )}
+                        </div>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </section>
+            </div>
           )}
-        </AnimatePresence>
-      </main>
-
-      <Footer textoDeLegalidad="Este sitio es un proyecto educativo." />
-
-      <Modal isOpen={selecMoto !== null} onClose={() => setSelecMoto(null)}>
-        {selecMoto && (
-          <div className="flex flex-col w-full bg-black">
-            {/* --- SECCIÓN HERO MODAL --- */}
-            <section className="relative w-full h-screen md:h-screen overflow-hidden shrink-0">
-              <img
-                src={selecMoto.imgHeroModal}
-                alt={selecMoto.nombre}
-                className="absolute inset-0 w-full h-full object-cover object-center brightness-[0.95] contrast-[1.10] rounded-2xl"
-              />
-
-              <div className="absolute inset-0 bg-gradient-to from-black/90 via-black/60 to-transparent z-10" />
-
-              {/* Contenedor de Textos */}
-              <div className="absolute inset-0 z-20 flex flex-col justify-center px-6 md:px-20 lg:px-32">
-                {/* Título Principal */}
-                <h1 className="text-5xl md:text-8xl font-[Rajdhani] font-black text-white italic uppercase leading-[0.9] tracking-tighter mb-4 drop-shadow-[0_4px_12px_rgba(0,0,0,0.5)]">
-                  {selecMoto.nombre} <br />
-                  <span className="text-zinc-500/40 text-4xl md:text-6xl block mt-2">
-                    {selecMoto.titulo}
-                  </span>
-                </h1>
-
-                <div className="flex items-center gap-3 mb-10">
-                  <div className="w-12 h-5 bg-blue-600 shadow-[0_0_8px_rgba(37,99,235,0.6)]"></div>
-                  <p className="text-zinc-300 font-medium tracking-[0.2em] text-sm md:text-lg uppercase italic">
-                    Revs Your Heart
-                  </p>
-                </div>
-                <div className="flex"></div>
-              </div>
-
-              <div className="absolute bottom-10 right-10 z-20 hidden md:block">
-                <p className="font-[Rajdhani] text-zinc-600 text-xs tracking-[0.5em] uppercase vertical-text opacity-60">
-                  Yamaha Motor Japan // 2026
-                </p>
-              </div>
-            </section>
-
-            {/* --- SECCIÓN DE CONTENIDO --- */}
-            <section className="w-full py-20 px-6 md:px-20 bg-black border-t border-zinc-900/80">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 max-w-7xl mx-auto">
-                {/* Lado izquierdo: Descripción */}
-                <div className="space-y-6">
-                  <h2 className="text-blue-500 font-[Rajdhani] text-2xl font-bold uppercase italic tracking-wider">
-                    El ADN Dark Side of Japan
-                  </h2>
-                  <p className="text-zinc-400 text-lg leading-relaxed font-light">
-                    {selecMoto.descripcion ||
-                      "Diseñada para dominar las calles con un torque agresivo y una agilidad sin precedentes."}
-                  </p>
-                  <img src={selecMoto.img1} alt="" />
-                  <img src={selecMoto.img} alt="" />
-                </div>
-
-                {/* Lado derecho: Ficha rápida */}
-                <div className="grid grid-cols-2 gap-4 h-5">
-                  <div className="bg-zinc-900/30 p-6 border-l-2 border-blue-600 backdrop-blur-sm">
-                    <span className="text-white text-xs uppercase block mb-5">
-                      Cilindrada
-                    </span>
-                    <span className="text-white text-2xl font-bold font-[Rajdhani] italic">
-                      {selecMoto.motor}
-                    </span>
-                  </div>
-                  <div className="bg-zinc-900/30 p-6 border-l-2 border-blue-600 backdrop-blur-sm">
-                    <span className="text-white text-xs uppercase block mb-5">
-                      Peso
-                    </span>
-                    <span className="text-white text-2xl font-bold font-[Rajdhani] italic">
-                      {selecMoto.peso || "189"} KG
-                    </span>
-                  </div>
-                  <div className="bg-zinc-900/30 p-6 border-l-2 border-blue-600 backdrop-blur-sm">
-                    <span className="text-white text-xs uppercase block mb-5">
-                      Valvulas
-                    </span>
-                    <span className="text-white text-2xl font-bold font-[Rajdhani] italic">
-                      {selecMoto.valvulas}
-                    </span>
-                  </div>
-                  <div className="bg-zinc-900/30 p-6 border-l-2 border-blue-600 backdrop-blur-sm">
-                    <span className="text-white text-xs uppercase block mb-5">
-                      Potencia
-                    </span>
-                    <span className="text-white text-2xl font-bold font-[Rajdhani] italic">
-                      {selecMoto.potencia}
-                    </span>
-                  </div>
-                  <div className="bg-zinc-900/30 p-6 border-l-2 border-blue-600 backdrop-blur-sm">
-                    <span className="text-white text-xs uppercase block mb-5">
-                      Torque
-                    </span>
-                    <span className="text-white text-2xl font-bold font-[Rajdhani] italic">
-                      {selecMoto.torque}
-                    </span>
-                  </div>
-                  <div className="bg-zinc-900/30 p-6 border-l-2 border-blue-600 backdrop-blur-sm">
-                    <span className="text-white text-xs uppercase block mb-5">
-                      Tecnologias
-                    </span>
-                    <span className="text-white text-2xl font-bold font-[Rajdhani] italic">
-                      <div className="flex flex-col gap-2.5">
-                        {selecMoto.tecnologias &&
-                        typeof selecMoto.tecnologias === "object" ? (
-                          Object.values(selecMoto.tecnologias).map(
-                            (tecnologia, index) => (
-                              <span
-                                key={index}
-                                className="text-white text-xs md:text-sm font-bold font-[Rajdhani] italic leading-tight block border-l border-blue-500 pl-2 tracking-wide"
-                              >
-                                {String(tecnologia)}
-                              </span>
-                            ),
-                          )
-                        ) : (
-                          <span className="text-zinc-600 text-xs font-bold font-[Rajdhani] italic tracking-widest">
-                            SISTEMA ESTÁNDAR MT
-                          </span>
-                        )}
-                      </div>
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </section>
-          </div>
-        )}
-      </Modal>
+        </Modal>
+      </Suspense>
     </div>
   );
 }
